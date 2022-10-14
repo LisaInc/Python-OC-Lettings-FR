@@ -1,6 +1,5 @@
 from django.test import TestCase
 from django.test import Client
-from django.test import TestCase
 from lettings.models import Letting, Address
 from django.urls import reverse
 import pytest
@@ -24,9 +23,9 @@ class TestLettingView(TestCase):
     def test_index_lettings(self):
         response = self.client.get(reverse("lettings:index"))
         assert response.status_code == 200
-        assert b'Lettings' in response.content
+        assert b"Lettings" in response.content
 
     def test_profile(self):
-        response = self.client.get(reverse("lettings:letting", args=['1']))
+        response = self.client.get(reverse("lettings:letting", args=["1"]))
         assert response.status_code == 200
-        assert b'titre' in response.content
+        assert b"titre" in response.content

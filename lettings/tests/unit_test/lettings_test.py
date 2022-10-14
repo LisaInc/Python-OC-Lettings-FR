@@ -1,4 +1,3 @@
-from ctypes import addressof
 from django.test import TestCase
 from lettings.models import Letting, Address
 import pytest
