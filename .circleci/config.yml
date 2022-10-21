@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Check Code Style
           command: flake8
-  build-docker:
+  build-and-push-docker:
     environment:
       IMAGE_NAME: oc-lettings-site
     docker:
@@ -44,40 +44,3 @@ workflows:
         filters:
             branches:
               only: master
-
-
-
-
-
-
-  deploy:
-    machine: true
-    steps:
-      - checkout
-      - run:
-         name: Build app and send Docker IMG to Heroku
-         command: |
-          sudo curl https://cli-assets.heroku.com/install.sh | sh
-          HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:login
-          HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:push -a oclettings-matspyder web
-          HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:release -a oclettings-matspyder web
-
-workflows:
-  sample: 
-    jobs:
-      - build-and-test
-      - build-docker:
-         requires:
-           - build-and-test
-         filters:
-            branches:
-               only: master
-      - deploy:
-         requires:
-           - build-and-test
-           - build-docker
-         filters:
-           branches:
-             only: master
-
-            
