@@ -34,6 +34,18 @@ jobs:
           command: |
             docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_TOKEN"
             docker push "$DOCKER_HUB_USERNAME"/oc_lettings_site:"$CIRCLE_SHA1"
+  deploy-dev:
+      machine: true
+      steps:
+        - checkout
+        - run:
+            name: Build and push Docker image to Heroku
+            command: |
+              sudo curl https://cli-assets.heroku.com/install.sh | sh
+              HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:login
+              HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:push -a circleci config validate web
+              HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:release -a circleci config validate web
+
 workflows:
   sample: 
     jobs:
@@ -43,4 +55,11 @@ workflows:
             - build-and-test
           filters:
               branches:
-                only: master
+                only: main
+      - deploy-dev:
+          requires:
+            - build-and-test
+            - build-and-push-docker
+          filters:
+            branches:
+              only: main
