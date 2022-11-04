@@ -4,3 +4,4 @@ pytest-django==3.9.0
 python-dotenv==0.21.0
 gunicorn
 sentry-sdk==1.10.1
+whitenoise==5.3.0
